@@ -1,0 +1,50 @@
+version: '2.4'
+
+networks:
+  cupnet:
+
+services:
+  ca.cipbancos.org.br:
+    container_name: ca.cipbancos.org.br
+    extends:
+      file: docker-compose-base.yml
+      service: ca-base
+
+  orderer.cipbancos.org.br:
+    container_name: orderer.cipbancos.org.br
+    extends:
+      file: docker-compose-base.yml
+      service: orderer-base
+  
+  peer0.cipbancos.org.br:
+    container_name: peer0.cipbancos.org.br
+    extra_hosts:
+      - "orderer.cipbancos.org.br:10.150.162.190"
+      - "ca.cipbancos.org.br:10.150.162.190"
+    extends:
+      file: docker-compose-base.yml
+      service: peer0-base
+
+  couchdb:
+    container_name: couchdb
+    extends:
+      file: docker-compose-base.yml
+      service: couchdb-base
+  
+  cli:
+    container_name: cli
+    extra_hosts:
+      - "orderer.cipbancos.org.br:10.150.162.190"
+      - "ca.cipbancos.org.br:10.150.162.190"
+    extends:
+      file: docker-compose-base.yml
+      service: cli-base
+  
+  webapp:
+    container_name: webapp
+    extra_hosts:
+      - "orderer.cipbancos.org.br:10.150.162.190"
+      - "ca.cipbancos.org.br:10.150.162.190"
+    extends:
+      file: docker-compose-base.yml
+      service: webapp-base

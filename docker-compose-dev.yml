@@ -1,0 +1,102 @@
+version: '2.4'
+
+networks:
+  cupnet:
+
+services:
+  ca.cipbancos.org.br:
+    container_name: ca.cipbancos.org.br
+    extends:
+      file: docker-compose-base.yml
+      service: ca-base
+
+  orderer.cipbancos.org.br:
+    container_name: orderer.cipbancos.org.br
+    extends:
+      file: docker-compose-base.yml
+      service: orderer-base
+  
+  peer0.cipbancos.org.br:
+    container_name: peer0.cipbancos.org.br
+    extends:
+      file: docker-compose-base.yml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.cipbancos.org.br
+      - CORE_PEER_ADDRESS=peer0.cipbancos.org.br:7051
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb:5984
+    ports:
+      - 7051:7051
+      - 7053:7053
+    volumes:
+      - ./config/crypto-config/peerOrganizations/cipbancos.org.br/peers/peer0.cipbancos.org.br/msp:/etc/hyperledger/msp/peer
+
+  peer1.cipbancos.org.br:
+    container_name: peer1.cipbancos.org.br
+    extends:
+      file: docker-compose-base.yml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.cipbancos.org.br
+      - CORE_PEER_ADDRESS=peer1.cipbancos.org.br:7061
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb:5985
+    ports:
+      - 7061:7051
+      - 7063:7053
+    volumes:
+      - ./config/crypto-config/peerOrganizations/cipbancos.org.br/peers/peer0.cipbancos.org.br/msp:/etc/hyperledger/msp/peer
+
+  couchdb-peer0:
+    container_name: couchdb-peer0
+    extends:
+      file: docker-compose-base.yml
+      service: couchdb-base
+    ports:
+      - 5984:5984
+  
+  couchdb-peer1:
+    container_name: couchdb-peer1
+    extends:
+      file: docker-compose-base.yml
+      service: couchdb-base
+    ports:
+      - 5985:5984
+  
+  cli:
+    container_name: cli
+    extends:
+      file: docker-compose-base.yml
+      service: cli-base
+
+  webapp-peer0:
+    container_name: webapp-peer1
+    extends:
+      file: docker-compose-base.yml
+      service: webapp-base
+    environment:
+      - WEBAPP_USERAPPPATH=
+      - WEBAPP_PEER=peer0.cipbancos.org.br
+      - WEBAPP_PEER_PORT=7051
+      - WEBAPP_PORT_EVENTHUB=7053
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./webapp-volume-peer1/minerva:/usr/local/minerva/
+      - ./webapp-volume-peer1/h2db:/root
+  
+  webapp-peer1:
+    container_name: webapp-peer1
+    extends:
+      file: docker-compose-base.yml
+      service: webapp-base
+    environment:
+      - WEBAPP_USERAPPPATH=
+      - WEBAPP_PEER=peer1.cipbancos.org.br
+      - WEBAPP_PEER_PORT=7061
+      - WEBAPP_PORT_EVENTHUB=7063
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./webapp-volume-peer1/minerva:/usr/local/minerva/
+      - ./webapp-volume-peer1/h2db:/root
+    
