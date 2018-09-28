@@ -87,8 +87,8 @@ services:
     ports:
       - "8081:8080"
     volumes:
-      - ./webapp-volume-peer1/minerva:/usr/local/minerva/
-      - ./webapp-volume-peer1/h2db:/root
+      - ./webapp-volume-peer0/minerva:/usr/local/minerva/
+      - ./webapp-volume-peer0/h2db:/root
   
   webapp-peer1:
     container_name: webapp-peer1
