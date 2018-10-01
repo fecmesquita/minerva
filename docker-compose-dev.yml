@@ -22,7 +22,7 @@ services:
       file: docker-compose-base.yml
       service: peer-base
     environment:
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=cup_cupnet
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=minerva_cupnet
       - CORE_PEER_ID=peer0.cipbancos.org.br
       - CORE_PEER_ADDRESS=peer0.cipbancos.org.br:7051
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer0:5984
@@ -40,13 +40,13 @@ services:
       file: docker-compose-base.yml
       service: peer-base
     environment:
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=cup_cupnet
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=minerva_cupnet
       - CORE_PEER_ID=peer1.cipbancos.org.br
-      - CORE_PEER_ADDRESS=peer1.cipbancos.org.br:7061
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer1:6984
+      - CORE_PEER_ADDRESS=peer1.cipbancos.org.br:7051
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer1:5984
     ports:
-      - 7061:7051
-      - 7063:7053
+      - 8051:7051
+      - 8053:7053
     volumes:
       - ./config/crypto-config/peerOrganizations/cipbancos.org.br/peers/peer1.cipbancos.org.br/msp:/etc/hyperledger/msp/peer
     depends_on:
@@ -66,7 +66,7 @@ services:
       file: docker-compose-base.yml
       service: couchdb-base
     ports:
-      - 6984:5984
+      - 7984:5984
   
   cli:
     container_name: cli
@@ -75,7 +75,7 @@ services:
       service: cli-base
 
   webapp-peer0:
-    container_name: webapp-peer1
+    container_name: webapp-peer0
     extends:
       file: docker-compose-base.yml
       service: webapp-base
@@ -98,8 +98,8 @@ services:
     environment:
       - WEBAPP_USERAPPPATH=
       - WEBAPP_PEER=peer1.cipbancos.org.br
-      - WEBAPP_PEER_PORT=7061
-      - WEBAPP_PORT_EVENTHUB=7063
+      - WEBAPP_PEER_PORT=7051
+      - WEBAPP_PORT_EVENTHUB=7053
     ports:
       - "8082:8080"
     volumes:

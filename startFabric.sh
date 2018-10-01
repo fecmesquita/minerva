@@ -38,7 +38,7 @@ docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hy
 # Now launch the CLI container in order to install and instantiate chaincode
 docker-compose -f ./docker-compose-dev.yml up -d cli
 
-export CLI_PEER=peer0.cipbancos.org.br:7051
+#export CLI_PEER=peer0.cipbancos.org.br:7051
 
 docker exec -e "CORE_PEER_ADDRESS=peer0.cipbancos.org.br:7051" -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli peer chaincode install -n minerva-app -v $1 -p github.com/minerva-app
 docker exec -e "CORE_PEER_ADDRESS=peer0.cipbancos.org.br:7051" -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli peer chaincode instantiate -o orderer.cipbancos.org.br:7050 -C mychannel -n minerva-app -v $1 -c '{"Args":[""]}' -P "OR ('CIPMSP.member')"
@@ -64,7 +64,7 @@ docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hy
 # Join peer1.cipbancos.org.br to the channel.
 docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@cipbancos.org.br/msp" peer1.cipbancos.org.br peer channel join -b mychannel_config.block
 
-docker exec -e "CORE_PEER_ADDRESS=peer1.cipbancos.org.br:7061" -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli peer chaincode install -n minerva-app -v $1 -p github.com/minerva-app
+docker exec -e "CORE_PEER_ADDRESS=peer1.cipbancos.org.br:7051" -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli peer chaincode install -n minerva-app -v $1 -p github.com/minerva-app
 sleep 5
 
 # Launch webapplication container.
