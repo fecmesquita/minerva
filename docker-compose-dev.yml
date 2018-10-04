@@ -57,17 +57,13 @@ services:
     extends:
       file: docker-compose-base.yml
       service: couchdb-base
-    ports:
-      - 5984:5984
   
   couchdb-peer1:
     container_name: couchdb-peer1
     extends:
       file: docker-compose-base.yml
       service: couchdb-base
-    ports:
-      - 7984:5984
-  
+
   cli:
     container_name: cli
     extends:
@@ -85,8 +81,8 @@ services:
       - WEBAPP_PEER_PORT=7051
       - WEBAPP_PORT_EVENTHUB=7053
     ports:
-      - "8081:8080"
-      - 7777:7777
+      - 8081:8080
+      #- 7777:7777 #debug port
     volumes:
       - ./webapp-volume-peer0/minerva:/usr/local/minerva/
       - ./webapp-volume-peer0/h2db:/root
@@ -102,8 +98,8 @@ services:
       - WEBAPP_PEER_PORT=7051
       - WEBAPP_PORT_EVENTHUB=7053
     ports:
-      - "8082:8080"
-      - 8888:8888
+      - 8082:8080
+      #- 8888:8888 #debug port
     volumes:
       - ./webapp-volume-peer1/minerva:/usr/local/minerva/
       - ./webapp-volume-peer1/h2db:/root
