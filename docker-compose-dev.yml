@@ -44,9 +44,9 @@ services:
       - CORE_PEER_ID=peer1.cipbancos.org.br
       - CORE_PEER_ADDRESS=peer1.cipbancos.org.br:7051
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer1:5984
-    ports:
-      - 8051:7051
-      - 8053:7053
+    #ports:
+      #- 8051:7051
+      #- 8053:7053
     volumes:
       - ./config/crypto-config/peerOrganizations/cipbancos.org.br/peers/peer1.cipbancos.org.br/msp:/etc/hyperledger/msp/peer
     depends_on:
@@ -57,12 +57,16 @@ services:
     extends:
       file: docker-compose-base.yml
       service: couchdb-base
+    #ports:
+       #- 5984:5984
   
   couchdb-peer1:
     container_name: couchdb-peer1
     extends:
       file: docker-compose-base.yml
       service: couchdb-base
+    #ports:
+       #- 6984:5984
 
   cli:
     container_name: cli
@@ -86,6 +90,9 @@ services:
     volumes:
       - ./webapp-volume-peer0/minerva:/usr/local/minerva/
       - ./webapp-volume-peer0/h2db:/root
+    depends_on:
+      - peer0.cipbancos.org.br
+      - couchdb-peer0
   
   webapp-peer1:
     container_name: webapp-peer1
@@ -103,4 +110,7 @@ services:
     volumes:
       - ./webapp-volume-peer1/minerva:/usr/local/minerva/
       - ./webapp-volume-peer1/h2db:/root
+    depends_on:
+      - peer1.cipbancos.org.br
+      - couchdb-peer1
     
