@@ -2,3 +2,5 @@
 /webapp-volume/webapps/CRMMock/
 /chaincode/hyperledger/
 /webapp-volume/webapps/.DS_Store
+.bash_history
+.DS_Store
