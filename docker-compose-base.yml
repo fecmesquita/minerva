@@ -13,7 +13,7 @@ services:
     volumes:
       - ./config/scripts-ca/:/scripts
       - ./config/crypto-config/peerOrganizations/cipbancos.org.br/ca/:/etc/hyperledger/fabric-ca-server-config
-    command: /scripts/start.sh
+    command: sh -c 'chmod +x /scripts/start.sh && /scripts/start.sh'
     networks:
       - cupnet
   
@@ -27,7 +27,7 @@ services:
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/msp/orderer/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
-    command: sh -c '/scripts/start.sh && orderer'
+    command: sh -c 'chmod +x /scripts/start.sh && /scripts/start.sh && orderer'
     ports:
       - 7050:7050
     volumes:
@@ -58,7 +58,7 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
-    command: sh -c 'peer node start && /scripts/start.sh'
+    command: sh -c 'peer node start && chmod +x /scripts/start.sh && /scripts/start.sh'
     # command: peer node start --peer-chaincodedev=true
     volumes:
       - ./config/scripts/:/scripts
@@ -77,7 +77,6 @@ services:
     environment:
       - COUCHDB_USER=
       - COUCHDB_PASSWORD=
-    #command: /scripts/start.sh
     volumes:
       - ./config/scripts/:/scripts
     networks:
@@ -91,12 +90,12 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.cipbancos.org.br:7051
+      #- CORE_PEER_ADDRESS=peer0.cipbancos.org.br:7051
       - CORE_PEER_LOCALMSPID=CIPMSP
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp
       - CORE_CHAINCODE_KEEPALIVE=10
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: sh -c '/scripts/start.sh && /bin/bash'
+    command: sh -c 'chmod +x /scripts/start.sh && /scripts/start.sh && /bin/bash'
     volumes:
       - ./config/scripts/:/scripts
       - /var/run/:/host/var/run/
@@ -113,7 +112,7 @@ services:
     tty: true
     environment:
       - GOPATH=/opt/gopath
-    command: sh -c '/scripts/start.sh && /usr/local/tomcat/bin/catalina.sh start && /bin/bash'
+    command: sh -c 'chmod +x /scripts/start.sh && /scripts/start.sh && /usr/local/tomcat/bin/catalina.sh start && /bin/bash'
     volumes:
       - ./config/scripts/:/scripts
       - ./webapp-volume/webapps:/usr/local/tomcat/webapps

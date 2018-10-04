@@ -64,17 +64,30 @@ services:
       file: docker-compose-base.yml
       service: couchdb-base
   
-  cli:
-    container_name: cli
+  cli-peer0:
+    container_name: cli-peer0
     extra_hosts:
       - "orderer.cipbancos.org.br:10.150.162.190"
       - "ca.cipbancos.org.br:10.150.162.190"
+    environment:
+      - CORE_PEER_ADDRESS=peer0.cipbancos.org.br:7051
+    extends:
+      file: docker-compose-base.yml
+      service: cli-base
+
+  cli-peer1:
+    container_name: cli-peer1
+    extra_hosts:
+      - "orderer.cipbancos.org.br:10.150.162.190"
+      - "ca.cipbancos.org.br:10.150.162.190"
+    environment:
+      - CORE_PEER_ADDRESS=peer1.cipbancos.org.br:7051
     extends:
       file: docker-compose-base.yml
       service: cli-base
   
-  webapp:
-    container_name: webapp
+  webapp-peer0:
+    container_name: webapp-peer0
     extra_hosts:
       - "orderer.cipbancos.org.br:10.150.162.190"
       - "ca.cipbancos.org.br:10.150.162.190"
@@ -83,12 +96,32 @@ services:
       service: webapp-base
     environment:
       - WEBAPP_USERAPPPATH=/usr/local/minerva/
-      #- WEBAPP_PEER=peer0.cipbancos.org.br
+      - WEBAPP_PEER=peer0.cipbancos.org.br
       - WEBAPP_PEER_PORT=7051
       - WEBAPP_PORT_EVENTHUB=7053
     ports:
       - 8081:8080
       #- 8888:8888 #debug port
     volumes:
-      - ./webapp-volume-peer/minerva:/usr/local/minerva/
-      - ./webapp-volume-peer/h2db:/root
+      - ./webapp-volume/minerva:/usr/local/minerva/
+      - ./webapp-volume/h2db:/root
+
+  webapp-peer1:
+    container_name: webapp-peer1
+    extra_hosts:
+      - "orderer.cipbancos.org.br:10.150.162.190"
+      - "ca.cipbancos.org.br:10.150.162.190"
+    extends:
+      file: docker-compose-base.yml
+      service: webapp-base
+    environment:
+      - WEBAPP_USERAPPPATH=/usr/local/minerva/
+      - WEBAPP_PEER=peer1.cipbancos.org.br
+      - WEBAPP_PEER_PORT=7051
+      - WEBAPP_PORT_EVENTHUB=7053
+    ports:
+      - 8081:8080
+      #- 8888:8888 #debug port
+    volumes:
+      - ./webapp-volume/minerva:/usr/local/minerva/
+      - ./webapp-volume/h2db:/root

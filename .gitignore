@@ -1,2 +1,4 @@
 .startFabric.sh.swp
 /webapp-volume/webapps/CRMMock/
+/chaincode/hyperledger/
+/webapp-volume/webapps/.DS_Store

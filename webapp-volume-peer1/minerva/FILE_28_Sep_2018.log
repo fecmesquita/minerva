@@ -1,6 +1,0 @@
-18:33:47.223 [localhost-startStop-1] DEBUG io.netty.util.internal.logging.InternalLoggerFactory - Using SLF4J as the default logging framework 
-18:44:41.766 [localhost-startStop-1] DEBUG io.netty.util.internal.logging.InternalLoggerFactory - Using SLF4J as the default logging framework 
-18:51:31.892 [localhost-startStop-1] DEBUG io.netty.util.internal.logging.InternalLoggerFactory - Using SLF4J as the default logging framework 
-18:57:15.877 [localhost-startStop-1] DEBUG io.netty.util.internal.logging.InternalLoggerFactory - Using SLF4J as the default logging framework 
-19:03:19.051 [localhost-startStop-1] DEBUG io.netty.util.internal.logging.InternalLoggerFactory - Using SLF4J as the default logging framework 
-19:14:24.352 [localhost-startStop-1] DEBUG io.netty.util.internal.logging.InternalLoggerFactory - Using SLF4J as the default logging framework 

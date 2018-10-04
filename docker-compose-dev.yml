@@ -70,6 +70,8 @@ services:
 
   cli:
     container_name: cli
+    environment:
+      - CORE_PEER_ADDRESS=peer0.cipbancos.org.br:7051
     extends:
       file: docker-compose-base.yml
       service: cli-base

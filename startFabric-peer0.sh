@@ -36,16 +36,15 @@ docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hy
 docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@cipbancos.org.br/msp" peer0.cipbancos.org.br peer channel join -b mychannel.block
 
 # Now launch the CLI container in order to install and instantiate chaincode
-docker-compose -f ./docker-compose-bluemix.yml up -d cli
+docker-compose -f ./docker-compose-bluemix.yml up -d cli-peer0
 
-docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli peer chaincode install -n minerva-app -v $1 -p github.com/minerva-app
-docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli peer chaincode instantiate -o orderer.cipbancos.org.br:7050 -C mychannel -n minerva-app -v $1 -c '{"Args":[""]}' -P "OR ('CIPMSP.member')"
+docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli-peer0 peer chaincode install -n minerva-app -v $1 -p github.com/minerva-app
+docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli-peer0 peer chaincode instantiate -o orderer.cipbancos.org.br:7050 -C mychannel -n minerva-app -v $1 -c '{"Args":[""]}' -P "OR ('CIPMSP.member')"
 sleep 10
 # Invoke initLedger to populate the ledger.
-docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli peer chaincode invoke -o orderer.cipbancos.org.br:7050 -C mychannel -n minerva-app -c '{"function":"initLedger","Args":[""]}'
+docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli-peer0 peer chaincode invoke -o orderer.cipbancos.org.br:7050 -C mychannel -n minerva-app -c '{"function":"initLedger","Args":[""]}'
 
 # Launch webapplication container.
-docker-compose -f ./docker-compose-bluemix.yml up -d webapp
-docker exec webapp export WEBAPP_PEER=peer0.cipbancos.org.br
+docker-compose -f ./docker-compose-bluemix.yml up -d webapp-peer0
 
 printf "\nTotal execution time : $(($(date +%s) - starttime)) secs ...\n\n"

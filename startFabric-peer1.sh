@@ -37,13 +37,12 @@ docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hy
 docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@cipbancos.org.br/msp" peer1.cipbancos.org.br peer channel join -b mychannel_config.block
 
 # Now launch the CLI container in order to install and instantiate chaincode
-docker-compose -f ./docker-compose-bluemix.yml up -d cli
+docker-compose -f ./docker-compose-bluemix.yml up -d cli-peer1
 
-docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli peer chaincode install -n minerva-app -v $1 -p github.com/minerva-app
+docker exec -e "CORE_PEER_LOCALMSPID=CIPMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/cipbancos.org.br/users/Admin@cipbancos.org.br/msp" cli-peer1 peer chaincode install -n minerva-app -v $1 -p github.com/minerva-app
 sleep 5
 
 # Launch webapplication container.
-docker-compose -f ./docker-compose-bluemix.yml up -d webapp
-docker exec webapp export WEBAPP_PEER=peer1.cipbancos.org.br
+docker-compose -f ./docker-compose-bluemix.yml up -d webapp-peer1
 
 printf "\nTotal execution time : $(($(date +%s) - starttime)) secs ...\n\n"

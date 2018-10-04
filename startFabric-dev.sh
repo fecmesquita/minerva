@@ -24,6 +24,8 @@ set -ev
 
 docker-compose -f docker-compose-dev.yml up -d peer0.cipbancos.org.br couchdb-peer0
 
+docker exec --user root couchdb-peer0 /scripts/start.sh
+
 # wait for Hyperledger Fabric to start
 # incase of errors when running later commands, issue export FABRIC_START_TIMEOUT=<larger number>
 export FABRIC_START_TIMEOUT=5
